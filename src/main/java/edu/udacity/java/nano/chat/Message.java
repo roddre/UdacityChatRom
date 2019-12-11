@@ -3,17 +3,21 @@ package edu.udacity.java.nano.chat;
 /**
  * WebSocket message model
  */
+
+enum Type{
+    SPEAK, ENTER, CLOSE
+}
 public class Message {
     // TODO: add message model.
 
     private String username;
     private String msg;
-    private String type;
+    private Type type;
     private int onlineCount;
 
     public Message(){}
 
-    public Message(String username, String msg, String type, int onlineCount) {
+    public Message(String username, String msg, Type type, int onlineCount) {
         this.username = username;
         this.msg = msg;
         this.type = type;
@@ -32,10 +36,10 @@ public class Message {
     public void setMsg(String msg){
         this.msg = msg;
     }
-    public String getType(){
+    public Type getType(){
         return type;
     }
-    public void setType(String type){
+    public void setType(Type type){
         this.type = type;
     }
     public void setOnlineCount(int onlineCount) {

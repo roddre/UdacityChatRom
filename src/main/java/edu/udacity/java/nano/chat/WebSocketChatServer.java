@@ -48,7 +48,8 @@ public class WebSocketChatServer {
     public void onOpen(Session session) {
         //TODO: add on open connection.
         onlineSessions.put(session.getId(), session);
-        Message message = new Message(null, "Entering", "ENTER", onlineSessions.size());
+        Message message = new Message(null, "Entering", Type.ENTER, onlineSessions.size());
+        message.setUsername(session.getId());
         String jsonMsg = JSON.toJSONString(message);
         sendMessageToAll(jsonMsg);
     }
@@ -60,6 +61,7 @@ public class WebSocketChatServer {
     public void onMessage(Session session, String jsonStr) {
         //TODO: add send message.
         Message message = JSON.parseObject(jsonStr, Message.class);
+        message.setType(Type.SPEAK);
         message.setOnlineCount(onlineSessions.values().size());
         String jsonMsg = JSON.toJSONString(message);
         sendMessageToAll(jsonMsg);
@@ -71,7 +73,9 @@ public class WebSocketChatServer {
     @OnClose
     public void onClose(Session session) {
         //TODO: add close connection.
-        onlineSessions.remove(session);
+        Message message = new Message(null, "Has left the chat", Type.SPEAK, onlineSessions.size()-1);
+        onlineSessions.remove(session.getId());
+        sendMessageToAll(JSON.toJSONString(message));
     }
 
     /**
